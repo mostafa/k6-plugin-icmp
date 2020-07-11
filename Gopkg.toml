@@ -1,0 +1,12 @@
+[prune]
+  go-tests = true
+  unused-packages = true
+
+[[constraint]]
+  name = "github.com/sparrc/go-ping"
+  version = "master"
+
+[[constraint]]
+  name = "github.com/loadimpact/k6"
+  version = "master"
+
