@@ -26,14 +26,15 @@ func (*icmp) Ping(ctx context.Context, hostname string, count int) error {
 		if count == 0 {
 			count = 1
 		}
-		pinger.Count = count
-		pinger.Run()
-		currentStats := pinger.Statistics()
 
+		pinger.SetPrivileged(true)
+		pinger.Count = count
+		now := time.Now()
+		pinger.Run()
+
+		currentStats := pinger.Statistics()
 		tags := make(map[string]string)
 		tags["address"] = currentStats.Addr
-
-		now := time.Now()
 
 		stats.PushIfNotDone(ctx, state.Samples, stats.Sample{
 			Time:   now,
@@ -59,25 +60,25 @@ func (*icmp) Ping(ctx context.Context, hostname string, count int) error {
 		stats.PushIfNotDone(ctx, state.Samples, stats.Sample{
 			Metric: MinRtt,
 			Tags:   stats.IntoSampleTags(&tags),
-			Value:  float64(currentStats.MinRtt.Seconds()),
+			Value:  float64(currentStats.MinRtt.Milliseconds()),
 		})
 
 		stats.PushIfNotDone(ctx, state.Samples, stats.Sample{
 			Metric: MaxRtt,
 			Tags:   stats.IntoSampleTags(&tags),
-			Value:  float64(currentStats.MaxRtt.Seconds()),
+			Value:  float64(currentStats.MaxRtt.Milliseconds()),
 		})
 
 		stats.PushIfNotDone(ctx, state.Samples, stats.Sample{
 			Metric: AvgRtt,
 			Tags:   stats.IntoSampleTags(&tags),
-			Value:  float64(currentStats.AvgRtt.Seconds()),
+			Value:  float64(currentStats.AvgRtt.Milliseconds()),
 		})
 
 		stats.PushIfNotDone(ctx, state.Samples, stats.Sample{
 			Metric: StdDevRtt,
 			Tags:   stats.IntoSampleTags(&tags),
-			Value:  float64(currentStats.StdDevRtt.Seconds()),
+			Value:  float64(currentStats.StdDevRtt.Milliseconds()),
 		})
 
 		return nil

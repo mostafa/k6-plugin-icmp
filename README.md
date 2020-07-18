@@ -6,7 +6,7 @@ IPv4 ping example script:
 import { ping } from 'k6-plugin/icmp';  // import icmp plugin
 
 export default function () {
-    ping("google.com")
+    ping("google.com");
 }
 ```
 
@@ -16,15 +16,14 @@ IPv6 ping example script:
 import { ping } from 'k6-plugin/icmp';  // import icmp plugin
 
 export default function () {
-    ping("::1") // ping localhost with IPv6 address
+    ping("::1"); // ping localhost with IPv6 address
 }
 ```
 
 Result output for IPv4 test:
 
 ```bash
-$ sudo echo "0 2000" > /proc/sys/net/ipv4/ping_group_range
-$ ./k6 run --vus 50 --duration 30s --plugin=icmp.so test.js
+$ sudo ./k6 run --vus 50 --duration 30s --plugin=icmp.so test.js
 
           /\      |‾‾|  /‾‾/  /‾/
      /\  /  \     |  |_/  /  / /
