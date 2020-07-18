@@ -14,7 +14,13 @@ func New() *icmp {
 	return &icmp{}
 }
 
-func (*icmp) Ping(ctx context.Context, hostname string, count int) error {
+func (*icmp) Ping(
+	ctx context.Context,
+	hostname string,
+	count int,
+	interval int,
+	timeout int,
+	size int) error {
 	state, err := GetState(ctx)
 
 	if err == nil {
@@ -27,8 +33,25 @@ func (*icmp) Ping(ctx context.Context, hostname string, count int) error {
 			count = 1
 		}
 
+		intervalDuration := time.Duration(1) * time.Second
+		if interval > 0 {
+			intervalDuration = time.Duration(interval) * time.Second
+		}
+
+		timeoutDuration := time.Duration(10) * time.Second
+		if timeout > 0 {
+			timeoutDuration = time.Duration(timeout) * time.Second
+		}
+
+		if size == 0 {
+			size = 8
+		}
+
 		pinger.SetPrivileged(true)
 		pinger.Count = count
+		pinger.Interval = intervalDuration
+		pinger.Timeout = timeoutDuration
+		pinger.Size = size
 		now := time.Now()
 		pinger.Run()
 
