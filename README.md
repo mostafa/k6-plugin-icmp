@@ -52,15 +52,8 @@ $ sudo ./k6 run --vus 50 --duration 30s --plugin=icmp.so test.js
      output: -
      script: test.js
 
-    duration: 30s, iterations: -
-         vus: 50,
-
   duration: 30s, iterations: -
-         vus: 2,  
-
-  execution: local
-     script: test.js
-     output: -
+       vus: 2,  
 
   scenarios: (100.00%) 1 executors, 2 max VUs, 1m0s max duration (incl. graceful stop):
            * default: 2 looping VUs for 30s (gracefulStop: 30s)
